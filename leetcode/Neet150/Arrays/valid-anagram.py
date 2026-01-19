@@ -1,34 +1,33 @@
+# HashMap Solution
+# Space complexity O(n) - linear time
+# Time Complexity O(s + t) - linear time
+
 def isAnagram(s: str, t: str) -> bool:
-    freq = {}
+    freq_map = {}
 
-    for ch in s:
-        if ch not in freq:
-            freq[ch] = 1
+    for char in s:
+        if char not in freq_map:
+            freq_map[char] = 1
         else:
-            freq[ch] += 1
+            freq_map[char] += 1
 
+    for char in t:
+        if char in freq_map:
+            freq_map[char] -= 1
 
-    for ch in t:
-        if ch in freq:
-            freq[ch] -= 1
+            if freq_map[char] == 0:
+                del freq_map[char]
         else:
-            freq[ch] = 1
+            return False
 
-        if ch in freq and freq[ch] == 0:
-            del freq[ch]
+    if not freq_map:
+        return True
 
+    return False
 
-
-    if freq:
-        return False
-
-    return True
 
 
 if __name__ == "__main__":
     s1 = "jar"
-    t2 = "jam"
+    t2 = "raj"
     print(isAnagram(s1, t2))
-
-
-# HashMap Solution

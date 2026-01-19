@@ -1,14 +1,24 @@
+# Approach: use a map to store single values as keys and their respective indexes as values.
+# On each iteration through the nums array, check if the diff between target and current num in the map already. In case,
+# if it is - return an index of the remainder first and then of the current value itself
+
+# Space complexity: O(n)
+# Time complexity: O(n)
+
 
 def twoSum(nums: list, target: int) -> list:
-    index_map = {}
+    num_index_map = {}
 
     for i in range(len(nums)):
-        index_map[nums[i]] = i
 
-    for i in range(len(nums)):
-        diff = target - nums[i]
-        if diff in index_map and i != index_map[diff]:
-            return sorted([index_map[diff], i])
+        to_add = target - nums[i]
+        if to_add in num_index_map:
+            return [num_index_map[to_add], i]
+
+        num_index_map[nums[i]] = i
+
+    return []
+
 
 
 
