@@ -1,6 +1,15 @@
 from typing import List
 from tester import Tester
 
+# Time Complexity: O(n)*3 = O(n)
+# Space Complexity: O(n) + O(n) = O(n)
+
+# Approach
+# Create two arrays: prefix_max and suffix_max. In those arrays, under a particular index store a maximum value before
+# that index (in the prefix_max array) and a maximum value after that index (in the suffix_max array). Finally, iterate
+# through the values in the height var and for each index calculate the amount of water that can be stored at that par-
+# - ticular position make using the formula -> min(prefix_max, suffix_max) - height[i]
+
 class Solution:
     def trap(self, height: List[int]) -> int:
 
