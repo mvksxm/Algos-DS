@@ -1,23 +1,49 @@
+from typing import List
+from tester import Tester
+
+# Time Complexity: O(n)
+# Space Complexity: O(1)
+
+# Approach (Two Pointers)
+# Define left pointer, right pointer and the var that will hold the sum of the water between two bars. On each iteration
+# calculate the sum of the water between bars and update the global sum, in case, if local one is bigger. After updating
+# the sum, iterate the pointer that holds the value smaller than the one held by another pointer. In case, if two values
+# are equal - iterate both of the pointers.
 
 class Solution:
-    def maxArea(heights: list) -> int:
-        mx = 0
-         # [3, 7, 1, 9, 4, 2, 8, 5]
-        lft_p = 0
-        right_p = len(heights) - 1
+    def maxArea(self, heights: List[int]) -> int:
+        max_water = 0
+        l_p = 0
+        r_p = len(heights)-1
 
-        while lft_p < right_p:
-            min_element = min(heights[lft_p], heights[right_p])
-            mx = max(mx, min_element*(right_p - lft_p))
+        while l_p < r_p:
+            min_bar = min(heights[l_p], heights[r_p])
+            max_water = max(max_water, min_bar * (r_p - l_p))
 
-            if heights[lft_p] > heights[right_p]:
-                right_p -= 1
+            if heights[l_p] > heights[r_p]:
+                r_p -= 1
+            elif heights[r_p] > heights[l_p]:
+                l_p += 1
             else:
-                lft_p += 1
+                r_p -= 1
+                l_p += 1
 
-        return mx
+        return max_water
 
-print(Solution.maxArea([2,2,2]))
+
+if __name__ == "__main__":
+
+    sl = Solution()
+    tst = Tester()
+
+    test_cases = [
+        [[[1,7,2,5,4,7,3,6]], 36],
+        [[[2,2,2]], 4]
+    ]
+
+    tst.array_test(test_cases, sl.maxArea)
+
+
 
 
 
