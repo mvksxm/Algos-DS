@@ -1,75 +1,54 @@
-# Supposed to be a sliding windo
-class Solution:
-    def maxProfit(prices: list) -> int:
-        # if not prices:
-        #     return 0
-        #
-        # if len(prices) == 1:
-        #     return 0
-        #
-        # lft_pointer = 0
-        # right_pointer = lft_pointer + 1
-        #
-        # profit = 0
-        # while (right_pointer > lft_pointer and right_pointer < len(prices)):
-        #     profit = max(profit, prices[right_pointer] - prices[lft_pointer])
-        #
-        #     curr_left = lft_pointer
-        #     curr_right = right_pointer
-        #
-        #     for i in range(lft_pointer+1, len(prices)):
-        #         if prices[i] < prices[lft_pointer]:
-        #             lft_pointer = i
-        #             right_pointer = lft_pointer + 1 if right_pointer < lft_pointer else right_pointer
-        #             break
-        #
-        #     for i in range(right_pointer+1, len(prices)):
-        #         if prices[i] >= prices[right_pointer]:
-        #             right_pointer = i
-        #             break
-        #
-        #     if lft_pointer == curr_left and right_pointer == curr_right:
-        #         break
-        #
-        # return profit
-        # ===================================
-        # if not prices or len(prices) == 1:
-        #     return 0
-        #
-        # l_p = 0
-        # r_p = len(prices) - 1
-        #
-        # mx_val = 0
-        # min_val = 100
-        #
-        # while l_p <= r_p:
-        #     mx_val = max(mx_val, prices[r_p])
-        #     min_val = min(min_val, prices[l_p])
-        #     l_p += 1
-        #     r_p -= 1
-        #
-        # diff = mx_val - min_val
-        # return diff if diff > 0 else 0
-        # ======================================
+from tester import Tester
 
-        if not prices or len(prices) == 1:
+
+# Time Complexity: O(n)
+# Space Complexity: O(1)
+
+# Approach
+# Create a window, where left boundary will be equal to the smallest value in the particular window and adjustable right
+# boundary is always bigger than that smaller value. In case, if right boundary bumps into a value that smaller that the
+# left boundary of a window - update the left boundary and set it to the recently discovered smaller value. Also, it's
+# necessary to create a variable max_profit that will be holding a max profit, which can be earned. Value of a variable
+# will be updated on each iteration of the right boundary by the result of max(max_profit, (right_boundary - left_boundary))
+
+class Solution:
+    def maxProfit(self, prices: list) -> int:
+
+        if len(prices) <= 1:
             return 0
 
-        l_p = 0
-        r_p = l_p + 1
+        l_border = 0
+        r_border = 1
 
-        diff = 0
+        max_profit = 0
 
-        while r_p < len(prices):
-            if prices[l_p] >= prices[r_p]:
-                l_p = r_p
-                r_p += 1
-            elif prices[l_p] < prices[r_p]:
-                diff = max(diff, prices[r_p] - prices[l_p])
-                r_p += 1
+        while r_border < len(prices):
 
-        return diff
+            l_elem = prices[l_border]
+            r_elem = prices[r_border]
+
+            if r_elem <= l_elem:
+                l_border = r_border
+                r_border += 1
+            else:
+                profit = r_elem - l_elem
+                max_profit = max(profit, max_profit)
+                r_border += 1
+
+
+        return max_profit
+
+
+if __name__ == "__main__":
+    sln = Solution()
+
+    tst = Tester()
+    test_cases = [
+        [[[10,1,5,6,7,1]], 6],
+        [[[10,8,7,5,2]], 0]
+    ]
+
+    tst.array_test(test_cases, sln.maxProfit)
 
 
 
-print(Solution.maxProfit([7,1,5,3,6,4]))
