@@ -1,28 +1,37 @@
-class MinStack:
 
+# Time Complexity: O(1)
+# Space Complexity: O(n)
+
+# Approach
+# Maintain two stacks. One for all the values, another one for min values only. Min Stack should be populated only
+# if current value is less than or equal to the one, which is currently on top of the stack. Usual stack should be po -
+# - pulated as it is.
+# In case, if value that is being popped from the main stack is also on top of the min stack, pop the min value as well.
+
+class MinStack:
     def __init__(self):
-        self.stack_backend = []
-        self.stack_min_value = []
+        self._stack = []
+        self._min_stack = [2**31]
 
     def push(self, val: int) -> None:
-        self.stack_backend.append(val)
 
-        if self.stack_min_value and val <= self.stack_min_value[-1]:
-            self.stack_min_value.append(val)
-        elif not self.stack_min_value:
-            self.stack_min_value.append(val)
+        if val <= self._min_stack[-1]:
+            self._min_stack.append(val)
+
+        self._stack.append(val)
 
     def pop(self) -> None:
 
-        last_elem = self.stack_backend.pop()
-        if last_elem == self.stack_min_value[-1]:
-            self.stack_min_value.pop()
+        if not self._stack:
+            return None
 
-    def top(self) -> int | None:
-        if self.stack_backend:
-            return self.stack_backend[-1]
+        if self._stack[-1] == self._min_stack[-1]:
+            self._min_stack.pop()
 
-        return None
+        return self._stack.pop()
+
+    def top(self) -> int:
+        return self._stack[-1] if self._stack else None
 
     def getMin(self) -> int:
-        return self.stack_min_value[-1]
+        return self._min_stack[-1]

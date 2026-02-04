@@ -1,22 +1,39 @@
+from tester import Tester
+
+# Time Complexity: O(n), n = len(s)
+# Space Complexity: O(n)
+
+
 class Solution:
-    def isValid( s: str) -> bool:
-
-        stack = []
-        parentheses_map = {"(":")",  "{":"}", "[":"]"}
-
+    def isValid(self, s: str) -> bool:
+        par_map = {"{": "}", "[":"]", "(":")"}
+        par_stack = []
 
         for par in s:
-            if stack and stack[-1] == par:
-                stack.pop()
-            elif par in parentheses_map:
-                stack.append(parentheses_map[par])
+            if par in par_map:
+                par_stack.append(par_map[par])
+            elif par_stack and par == par_stack[-1]:
+                par_stack.pop()
             else:
                 return False
 
-        return False if stack else True
+        if par_stack:
+            return False
 
-print(Solution.isValid("[]"))
-print(Solution.isValid("([{}])"))
-print(Solution.isValid("[(])"))
-print(Solution.isValid("[(])"))
-print(Solution.isValid("]"))
+        return True
+
+
+if __name__ == "__main__":
+
+    sln = Solution()
+    tst = Tester()
+
+    test_cases = [
+        [["[]"],True],
+        [["([{}])"],True],
+        [["[(])"],False],
+    ]
+
+    tst.array_test(test_cases, sln.isValid)
+
+
