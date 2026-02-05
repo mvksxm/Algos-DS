@@ -1,19 +1,34 @@
+
+# Time Complexity: O(log(n))
+# Space Complexity: O(1)
+
+# Approach
+# Implement Binary Search algorithm.
+
+
 class Solution:
-    def search(nums: list, target: int) -> int:
+    def search(self, nums: list, target: int) -> int:
+
         l_p = 0
         r_p = len(nums) - 1
 
         while l_p <= r_p:
-            middle_index = l_p + ((r_p - l_p) // 2)
 
-            if nums[middle_index] == target:
-                return middle_index
+            if nums[l_p] == target:
+                return l_p
 
-            if nums[middle_index] > target:
-                r_p = middle_index - 1
-            elif nums[middle_index] < target:
-                l_p = middle_index + 1
+            if nums[r_p] == target:
+                return r_p
+
+            middle_idx = l_p + ((r_p - l_p) // 2)
+            middle_element = nums[middle_idx]
+
+            if middle_element == target:
+                return middle_idx
+
+            if middle_element < target:
+                l_p = middle_idx + 1
+            else:
+                r_p = middle_idx - 1
 
         return -1
-
-print(Solution.search([-1,0,2,4,6,8], 4))
