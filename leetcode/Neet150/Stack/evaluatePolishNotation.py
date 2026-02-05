@@ -1,40 +1,59 @@
+import math
+from tester import Tester
+
+# Time Complexity: O(n)
+# Space Complexity: O(m); m - amount of numbers in tokens
+
+# Approach
+# Iterate through the tokens and add numbers to the stack until the mathematical operator would be encountered. Once
+# it is encountered - pop two top items from the stack, perform mathematical operation and add the result back on top
+# of the stack. Perform the same logic until the end of the tokens list.
+
 class Solution:
-    def evalRPN(tokens:  list) -> int:
-        operators = {"+", "-", "*", "/"}
+    def evalRPN(self, tokens: list) -> int:
+
+        if len(tokens) == 1: return int(tokens[0])
+
         stack = []
-        # expr_value = None
+        operators_set = {"+", "-", "*", "/"}
 
         for tkn in tokens:
-            if tkn in operators:
-                val2 = stack.pop()
-                val1 = stack.pop()
-                stack.append(Solution.operationExecution(tkn, val1, val2))
-
+            if tkn not in operators_set:
+                stack.append(int(tkn))
             else:
-                stack.append(tkn)
+                second_element = stack.pop()
+                first_element = stack.pop()
+                processed_element = self._perform_operation(tkn,first_element, second_element)
+                stack.append(processed_element)
 
         return stack[-1]
 
-    def operationExecution(operator, val1, val2):
-        val1 = int(val1)
-        val2 = int(val2)
 
-        if operator == "+":
-            return val1 + val2
+    def _perform_operation(self, operand, *digits) -> int:
 
-        if operator == "-":
-            return val1 - val2
+        if operand == "+":
+            return digits[0] + digits[1]
 
-        if operator == "*":
-            return val1 * val2
+        if operand == "-":
+            return digits[0] - digits[1]
 
-        if operator == "/":
-            return int(val1 / val2)
+        if operand == "*":
+            return digits[0] * digits[1]
 
-        return None
+        if operand == "/":
+            return math.trunc(digits[0] / digits[1])
+
+        raise Exception(f"Invalid operand - {operand}!")
 
 
-print(Solution.evalRPN(["2","1","+","3","*"]))
-print(Solution.evalRPN(["4","13","5","/","+"]))
-print(Solution.evalRPN(["10","6","9","3","+","-11","*","/","*","17","+","5","+"]))
-print(Solution.evalRPN(["3","11","+","5","-"]))
+if __name__ == "__main__":
+    sln = Solution()
+
+    tst = Tester()
+    test_cases = [
+        [[["10","6","9","3","+","-11","*","/","*","17","+","5","+"]], 22],
+        [[["1","2","+","3","*","4","-"]], 5]
+    ]
+    tst.array_test(test_cases,sln.evalRPN)
+
+
