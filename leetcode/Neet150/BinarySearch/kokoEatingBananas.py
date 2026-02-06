@@ -1,38 +1,49 @@
-import math
+from tester import Tester
+
+# Time Complexity: O(n*log(m))
+# Space Complexity: O(1)
+
+# Approach
+# By using Binary Search, continuously divide max value of the piles array by two (in order to find the medium speed).
+# On each division, calculate the amount of time that would be needed for eating all the piles with the medium speed.
+# In case, if amount of time is smaller than h, let right pointer of Binary Search be equal to medium_speed - 1, so that
+# it was possible to get the smaller speed that could produce a bigger time respectively (closer to h). On the other hand,
+# in case, if medium speed is bigger than h, let the left pointer of Binary Search window be equal to the medium_speed + 1,
+# in order to produce a higher speed during the next division, which, in turn, would produce a smaller amount of hours.
 
 class Solution:
-    def minEatingSpeed(piles: list, h: int) -> int:
+    def minEatingSpeed(self, piles: list, h: int) -> int:
+
+        r_speed = max(piles)
+        l_speed = 1
+
+        curr_min_speed = r_speed
+
+        while l_speed <= r_speed:
+            middle_speed = l_speed + ((r_speed - l_speed) // 2)
+
+            hours = 0
+            for pile in piles:
+                hours += pile // middle_speed
+                if pile % middle_speed > 0:
+                    hours += 1
+
+            if hours <= h:
+                curr_min_speed = middle_speed
+                r_speed =  middle_speed - 1
+            else:
+                l_speed = middle_speed + 1
+
+        return curr_min_speed
 
 
-        possible_rates = range(1, max(piles) + 1)
-        l_p = 0
-        r_p = len(possible_rates) - 1
-        possible_solution = 1000**3 + 1
+if __name__ == "__main__":
+    sln = Solution()
+    tst = Tester()
 
-        total_hours = 0
+    test_cases = [
+         [[[1,4,3,2],9], 2],
+         [[[25,10,23,4], 4], 25]
+    ]
 
-        while l_p <= r_p:
-            mid_index = l_p + ((r_p - l_p) // 2)
-            mid_elem = possible_rates[mid_index]
-
-            for p in piles:
-                total_hours += math.ceil(p / mid_elem)
-
-            # if total_hours == h:
-            #     return mid_elem
-
-            if total_hours <= h:
-                r_p = mid_index - 1
-                possible_solution = min(possible_solution, mid_elem)
-            elif total_hours > h:
-                l_p = mid_index + 1
-
-            total_hours = 0
-
-        return possible_solution
-
-
-print(Solution.minEatingSpeed([1,4,3,2], 9))
-print(Solution.minEatingSpeed([25,10,23,4], 4))
-print(Solution.minEatingSpeed([30,11,23,4,20], 6))
-print(Solution.minEatingSpeed([312884470], 312884469))
+    tst.array_test(test_cases, sln.minEatingSpeed)
